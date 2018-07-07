@@ -8,6 +8,7 @@ public class PlayerWeapon : MonoBehaviour
     public float ShootDelay;
     public float x = 1;
     public GameObject BulletPrefab;
+    public LayerMask friendlyLayer;
 
     Animator anim;
 
@@ -33,7 +34,7 @@ public class PlayerWeapon : MonoBehaviour
         //anim.Play("GunShot");
         RaycastHit hit;
         Vector3 hitDir = Vector3.zero ;
-        if (Physics.Raycast(transform.parent.GetChild(1).position, transform.parent.GetChild(1).forward, out hit, 100f))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 100f, friendlyLayer))
         {
             hitDir = hit.point - transform.GetChild(0).position;
             GameObject newBullet = Instantiate(BulletPrefab);

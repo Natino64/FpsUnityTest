@@ -3,15 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour {
     public float MovmentSpeed;
     public float LookSpeed;
     public bool AbleToMove;
 
+    Rigidbody rb;
+
     void Start()
     {
+        rb = this.GetComponent<Rigidbody>();
         StartCoroutine(checkForMove());
     }
+
     private IEnumerator checkForMove()
     {
         while (true)
@@ -41,9 +46,9 @@ public class PlayerControl : MonoBehaviour {
                 rotateVector += transform.up;
             if (Input.GetAxis("Mouse X") < 0)
                 rotateVector -= transform.up;
-
-
-            transform.position += moveVector * MovmentSpeed;
+            
+            rb.AddForce(Vector3.ClampMagnitude(moveVector, 1f) * MovmentSpeed);
+            //transform.position += moveVector * MovmentSpeed;
             transform.Rotate(rotateVector * LookSpeed);
 
             yield return new WaitForEndOfFrame();
